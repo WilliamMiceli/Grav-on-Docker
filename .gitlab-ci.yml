@@ -1,6 +1,7 @@
 image: docker:stable
 
 stages:
+  - build
 
 variables:
   # When using dind service we need to instruct docker, to talk with the
