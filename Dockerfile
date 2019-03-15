@@ -25,7 +25,7 @@ RUN wget https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-ad
 USER root
 
 # Configure nginx with grav
-WORKDIR grav-admin
+WORKDIR /var/www/grav-admin
 RUN cd webserver-configs && \
     sed -i 's/root \/home\/USER\/www\/html/root \/var\/www\/grav-admin/g' nginx.conf && \
     cp nginx.conf /etc/nginx/conf.d/default.conf
