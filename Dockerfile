@@ -4,7 +4,7 @@ FROM nginx:stable
 ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
-RUN add-apt-repository ppa:ondrej/php && \ # For PHP 7.2
+RUN add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y sudo wget unzip php-pclzip && \
     # Install PHP 7.2 and Required Modules for Grav
