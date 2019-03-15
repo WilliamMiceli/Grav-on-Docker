@@ -1,7 +1,7 @@
-FROM nginx:1.11.9
+FROM nginx:stable
 
-# Desired version of grav
-ARG GRAV_VERSION=1.1.16
+# Version of Grav to install
+ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
 RUN apt-get update && \
@@ -23,12 +23,6 @@ RUN wget https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-ad
 
 # Return to root user
 USER root
-
-# Install Acmetool Let's Encrypt client
-RUN echo 'deb http://ppa.launchpad.net/hlandau/rhea/ubuntu xenial main' > /etc/apt/sources.list.d/rhea.list \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9862409EF124EC763B84972FF5AC9651EDB58DFA \
-    && apt-get update \
-    && apt-get install acmetool
 
 # Configure nginx with grav
 WORKDIR grav-admin
