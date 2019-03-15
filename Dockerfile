@@ -4,8 +4,17 @@ FROM nginx:stable
 ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y sudo wget vim unzip php5 php5-curl php5-gd php-pclzip php5-fpm
+RUN add-apt-repository ppa:ondrej/php && \ # For PHP 7.2
+    apt-get update && \
+    apt-get install -y sudo wget unzip php-pclzip && \
+    # Install PHP 7.2 and Required Modules for Grav
+    apt-get install -y \
+    php7.2 \
+    php7.2-curl \
+    php7.2-gd # \
+    # php7.2-json \
+    # php7.2-mbstring \
+
 ADD https://github.com/krallin/tini/releases/download/v0.13.2/tini /usr/local/bin/tini
 RUN chmod +x /usr/local/bin/tini
 
