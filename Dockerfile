@@ -5,10 +5,10 @@ ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y --no-install-recommends software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
-    apt-get install -y sudo wget unzip && \
+    apt-get install -y --no-install-recommends sudo wget unzip && \
     # Install PHP 7.2 and Module Requirements for Grav
     php7.2 \
     php7.2-curl \
