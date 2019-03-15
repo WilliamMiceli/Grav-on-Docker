@@ -4,8 +4,9 @@ FROM nginx:stable
 ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends language-pack-en-base software-properties-common && \
+RUN export LC_ALL=C.UTF-8 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y --no-install-recommends sudo wget unzip && \
