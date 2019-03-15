@@ -5,7 +5,7 @@ ARG GRAV_VERSION=1.5.8
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install software-properties-common && \
+    apt-get install -y software-properties-common && \
     add-apt-repository ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y sudo wget unzip && \
