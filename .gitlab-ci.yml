@@ -1,5 +1,8 @@
 image: docker:stable
 
+services:
+  - docker:dind
+
 stages:
   - build
 
@@ -19,9 +22,6 @@ variables:
   # improved performance.
   DOCKER_DRIVER: overlay2
   TEST_IMAGE_NAME: grav_test:$CI_COMMIT_REF_NAME
-
-services:
-  - docker:dind
 
 before_script:
   - docker info
