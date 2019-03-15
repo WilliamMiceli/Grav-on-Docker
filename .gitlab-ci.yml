@@ -3,7 +3,13 @@ image: docker:latest
 services:
   - docker:dind
 
+stages:
+  - build
+
+variables:
+  TEST_IMAGE_NAME: grav_test:$CI_COMMIT_REF_NAME
+
 build:
   stage: build
   script:
-    - docker build --pull -t grav_test .
+    - docker build --pull -t $TEST_IMAGE_NAME .
