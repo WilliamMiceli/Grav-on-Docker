@@ -6,14 +6,11 @@ ARG GRAV_VERSION=1.5.8
 # Install dependencies
 RUN add-apt-repository ppa:ondrej/php && \
     apt-get update && \
-    apt-get install -y sudo wget unzip php-pclzip && \
-    # Install PHP 7.2 and Required Modules for Grav
-    apt-get install -y \
+    apt-get install -y sudo wget unzip && \
+    # Install PHP 7.2 and Module Requirements for Grav
     php7.2 \
     php7.2-curl \
-    php7.2-gd # \
-    # php7.2-json \
-    # php7.2-mbstring \
+    php7.2-gd
 
 ADD https://github.com/krallin/tini/releases/download/v0.13.2/tini /usr/local/bin/tini
 RUN chmod +x /usr/local/bin/tini
