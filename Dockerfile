@@ -40,8 +40,5 @@ RUN usermod -aG www-data nginx
 # Run startup script
 ADD resources /
 
-EXPOSE 80
-STOPSIGNAL SIGTERM
-# ENTRYPOINT [ "--" ]
-# Temporarily removed , "/usr/local/bin/startup.sh"
+# ENTRYPOINT [ "/usr/local/bin/startup.sh" ]
 CMD ["nginx", "-g", "daemon off;"]
