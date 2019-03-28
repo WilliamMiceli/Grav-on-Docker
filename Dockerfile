@@ -6,12 +6,14 @@ ARG GRAV_VERSION=1.5.10
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    # Install PHP and Modules Required for Grav
+    # Install PHP and modules needed for Grav, with optional modules to help with performance
     php \
+    php-acpu \
     php-curl \
     php-gd \
     php-mbstring \
     php-xml \
+    php-yaml \
     php-zip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +26,7 @@ RUN mkdir -p /var/www \
     && rm grav-admin-v$GRAV_VERSION.zip \
     && cd grav-admin \
     && bin/gpm install -f -y admin \
-    && apt-get remove -y ca-certificates unzip wget \
+    && apt-get remove -y ca-certificates openssl unzip wget \
     && rm -rf /var/lib/apt/lists/* \
     && chown www-data:www-data /var/www
 
@@ -40,5 +42,5 @@ RUN usermod -aG www-data nginx
 # Run startup script
 ADD resources /
 
-# ENTRYPOINT [ "/usr/local/bin/startup.sh" ]
-CMD ["nginx", "-g", "daemon off;"]
+# ENTRYPOINT ["/usr/local/bin/startup.sh"]
+CMD ["php", "nginx", "-g", "daemon off;"]
