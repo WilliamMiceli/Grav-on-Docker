@@ -1,4 +1,5 @@
 FROM nginx:stable
+USER root
 
 # Version of Grav to install
 ARG GRAV_VERSION=1.5.10
