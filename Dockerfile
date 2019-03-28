@@ -7,8 +7,9 @@ ARG GRAV_VERSION=1.5.10
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # Install PHP 7.2 and Module Requirements for Grav
-    # Temporarily removed sudo unzip
+    # Temporarily removed sudo
     ca-certificates \
+    unzip \
     wget \
     php
     # php-curl \
