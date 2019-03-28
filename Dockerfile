@@ -4,16 +4,13 @@ FROM nginx:stable
 ARG GRAV_VERSION=1.5.10
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     # Install PHP 7.2 and Module Requirements for Grav
     # Temporarily removed sudo
-    ca-certificates \
-    unzip \
-    wget \
     php \
     php-curl \
-    php-zip
+    php-zip \
+    ; rm -rf /var/lib/apt/lists/*
     # php-gd \
     # php-json \
     # php-mbstring
@@ -27,11 +24,14 @@ USER www-data
 
 # Install grav
 WORKDIR /var/www
-RUN wget https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip && \
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates unzip wget && \
+    wget https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip && \
     unzip grav-admin-v$GRAV_VERSION.zip && \
     rm grav-admin-v$GRAV_VERSION.zip && \
     cd grav-admin && \
-    bin/gpm install -f -y admin
+    bin/gpm install -f -y admin \
+    ; apt-get remove ca-certificates unzip wget \
+    ; rm -rf /var/lib/apt/lists/*
 
 # Return to root user
 USER root
