@@ -6,14 +6,14 @@ ARG GRAV_VERSION=1.5.10
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    # Install PHP 7.2 and Module Requirements for Grav
+    # Install PHP and Modules Required for Grav
     php \
     php-curl \
+    php-gd \
+    php-mbstring \
+    php-xml \
     php-zip \
     && rm -rf /var/lib/apt/lists/*
-    # php-gd \
-    # php-json \
-    # php-mbstring
 
 # Install grav
 WORKDIR /var/www
