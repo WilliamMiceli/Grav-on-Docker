@@ -5,35 +5,29 @@ services:
 
 stages:
   - Build Image
-  - Push to Docker Hub
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
-build:
+build-master:
   before_script:
     - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   stage: Build Image
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
-
-push-master:
-  stage: Push to Docker Hub
-  before_script:
-  - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-  script:
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:latest"
-    - docker push "$CI_REGISTRY_IMAGE:latest" "$CI_REGISTRY_URL"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_URL"
   only:
     - master
 
-push-other:
-  stage: Push to Docker Hub
+build-other:
   before_script:
-  - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+  stage: Build Image
   script:
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" "$CI_REGISTRY_URL"
   except:
     - master
