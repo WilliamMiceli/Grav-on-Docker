@@ -17,7 +17,7 @@ build-master:
   stage: Build Image
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_URL"
+    - docker push "$CI_REGISTRY_IMAGE"
   only:
     - master
 
@@ -28,6 +28,6 @@ build-other:
   stage: Build Image
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" "$CI_REGISTRY_URL"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
   except:
     - master
