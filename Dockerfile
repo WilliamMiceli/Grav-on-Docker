@@ -12,7 +12,8 @@ RUN apt-get update && \
     unzip \
     wget \
     php \
-    php-curl
+    php-curl \
+    php-zip
     # php-gd \
     # php-json \
     # php-mbstring
