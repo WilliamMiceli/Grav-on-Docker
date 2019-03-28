@@ -21,7 +21,7 @@ variables:
   # When using dind, it's wise to use the overlayfs driver for
   # improved performance.
   DOCKER_DRIVER: overlay2
-  TEST_IMAGE_NAME: grav_test:$CI_COMMIT_REF_NAME
+  IMAGE_TAG: grav:$CI_COMMIT_REF_NAME
 
 before_script:
   - docker info
@@ -29,4 +29,4 @@ before_script:
 build:
   stage: build
   script:
-    - docker build --pull -t $TEST_IMAGE_NAME .
+    - docker build --pull -t $IMAGE_TAG .
