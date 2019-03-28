@@ -6,11 +6,10 @@ ARG GRAV_VERSION=1.5.10
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Install PHP 7.2 and Module Requirements for Grav
-    # Temporarily removed sudo
     php \
     php-curl \
     php-zip \
-    ; rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
     # php-gd \
     # php-json \
     # php-mbstring
@@ -30,8 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
     rm grav-admin-v$GRAV_VERSION.zip && \
     cd grav-admin && \
     bin/gpm install -f -y admin \
-    ; apt-get remove ca-certificates unzip wget \
-    ; rm -rf /var/lib/apt/lists/*
+    && apt-get remove -y ca-certificates unzip wget \
+    && rm -rf /var/lib/apt/lists/*
 
 # Return to root user
 USER root
