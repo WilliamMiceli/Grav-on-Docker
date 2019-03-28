@@ -8,6 +8,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     # Install PHP 7.2 and Module Requirements for Grav
     # Temporarily removed sudo unzip
+    ca-certificates \
     wget \
     php
     # php-curl \
