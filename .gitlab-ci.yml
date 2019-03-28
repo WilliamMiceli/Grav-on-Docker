@@ -6,7 +6,6 @@ services:
 stages:
   - Build Image
   - Push to Docker Hub
-  - Cleanup Runner
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
@@ -17,14 +16,14 @@ build:
     - docker info
   stage: Build Image
   script:
-    - docker build --pull -t "$CI_COMMIT_SHORT_SHA" .
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
 
 push-master:
   stage: Push to Docker Hub
   before_script:
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker tag "$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE"
     - docker push "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_URL"
   after_script:
     - docker logout
@@ -36,15 +35,9 @@ push-other:
   before_script:
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker tag "$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" "$CI_REGISTRY_URL"
   after_script:
     - docker logout
   except:
     - master
-
-cleanup:
-  stage: Cleanup Runner
-  script:
-    - docker image prune --all --force
-  when: always
