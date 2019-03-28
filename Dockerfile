@@ -11,8 +11,8 @@ RUN apt-get update && \
     ca-certificates \
     unzip \
     wget \
-    php
-    # php-curl \
+    php \
+    php-curl
     # php-gd \
     # php-json \
     # php-mbstring
