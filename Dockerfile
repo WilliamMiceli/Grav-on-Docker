@@ -8,7 +8,7 @@ ARG GRAV_VERSION=1.5.10
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Install PHP and modules needed for Grav, with optional modules to help with performance
     php \
-    php-acpu \
+    php-apcu \
     php-curl \
     php-gd \
     php-mbstring \
