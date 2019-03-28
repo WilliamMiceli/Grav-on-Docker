@@ -15,9 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # php-json \
     # php-mbstring
 
-ADD https://github.com/krallin/tini/releases/download/v0.13.2/tini /usr/local/bin/tini
-RUN chmod +x /usr/local/bin/tini
-
 # Install grav
 WORKDIR /var/www
 RUN mkdir -p /var/www \
@@ -42,4 +39,10 @@ RUN usermod -aG www-data nginx
 
 # Run startup script
 ADD resources /
-ENTRYPOINT [ "/usr/local/bin/tini", "--", "/usr/local/bin/startup.sh" ]
+
+EXPOSE 80
+STOPSIGNAL SIGTERM
+
+ENTRYPOINT [ "--" ]
+# Temporarily removed , "/usr/local/bin/startup.sh"
+# CMD ["nginx", "-g", "daemon off;"]
