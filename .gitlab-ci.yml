@@ -23,10 +23,8 @@ push-master:
   before_script:
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE"
-    - docker push "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_URL"
-  after_script:
-    - docker logout
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:latest"
+    - docker push "$CI_REGISTRY_IMAGE:latest" "$CI_REGISTRY_URL"
   only:
     - master
 
@@ -37,7 +35,5 @@ push-other:
   script:
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" "$CI_REGISTRY_URL"
-  after_script:
-    - docker logout
   except:
     - master
