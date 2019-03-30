@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php \
     php-apcu \
     php-curl \
+    php-fpm \
     php-gd \
     php-mbstring \
     php-xml \
