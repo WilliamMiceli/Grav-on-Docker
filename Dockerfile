@@ -34,9 +34,7 @@ RUN mkdir -p /var/www \
 ADD https://raw.githubusercontent.com/getgrav/grav/fb20b58369d5e0140a4fa6da06edf8f40412f7bf/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
 RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf
-
-# Set the file permissions
-#RUN usermod -aG www-data nginx
+    && usermod -aG www-data nginx
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
