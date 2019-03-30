@@ -41,6 +41,3 @@ RUN usermod -aG www-data nginx
 
 # Run startup script
 ADD resources /
-
-# ENTRYPOINT ["/usr/local/bin/startup.sh"]
-CMD ["php", "nginx", "-g", "daemon off;"]
