@@ -36,7 +36,7 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf
 
 # Set the file permissions
-RUN usermod -aG www-data nginx
+#RUN usermod -aG www-data nginx
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
