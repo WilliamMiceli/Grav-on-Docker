@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:1.14.2
 USER root
 
 # Version of Grav to install
@@ -31,14 +31,13 @@ RUN mkdir -p /var/www \
     && rm -rf /var/lib/apt/lists/* \
     && chown www-data:www-data /var/www
 
-# Configure nginx with grav
-WORKDIR /var/www/grav-admin
-RUN cd webserver-configs \
-    && sed -i 's/root \/home\/USER\/www\/html/root \/var\/www\/grav-admin/g' nginx.conf \
-    && cp nginx.conf /etc/nginx/conf.d/default.conf
+# Configure NGINX with Grav
+ADD https://raw.githubusercontent.com/getgrav/grav/fb20b58369d5e0140a4fa6da06edf8f40412f7bf/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
+RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www\/grav-admin/g' /etc/nginx/conf.d/default.conf \
+    && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf
 
 # Set the file permissions
 RUN usermod -aG www-data nginx
 
-# Run startup script
-ADD resources /
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
