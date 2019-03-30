@@ -26,7 +26,7 @@ RUN mkdir -p /var/www \
     && unzip grav-admin-v$GRAV_VERSION.zip \
     && rm grav-admin-v$GRAV_VERSION.zip \
     && cd grav-admin \
-    && bin/gpm install -f -y admin \
+#    && bin/gpm install -f -y admin \
     && apt-get purge -y unzip wget \
     && rm -rf /var/lib/apt/lists/* \
     && chown www-data:www-data /var/www
