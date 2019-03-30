@@ -25,10 +25,10 @@ RUN mkdir -p /var/www \
     && unzip grav-admin-v$GRAV_VERSION.zip \
     && rm grav-admin-v$GRAV_VERSION.zip \
     && mv grav-admin/* /var/www/ \
-    && rm grav-admin \
+    && rm -rfv grav-admin \
     && apt-get purge -y unzip wget \
     && rm -rf /var/lib/apt/lists/* \
-    && chown www-data:www-data /var/www
+    && chown -R www-data:www-data /var/www
 
 # Configure NGINX for Grav
 ADD https://raw.githubusercontent.com/getgrav/grav/fb20b58369d5e0140a4fa6da06edf8f40412f7bf/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
