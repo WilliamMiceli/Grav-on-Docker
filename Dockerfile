@@ -37,7 +37,7 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && usermod -aG www-data nginx
 
 # Include Startup Script
-COPY /resources/*
+COPY /resources/ /resources/
 
 EXPOSE 80
 CMD ["sh", "/resources/startup.sh"]
