@@ -1,33 +1,31 @@
-FROM nginx:1.14.2
+FROM nginx:1.15.10-alpine
 USER root
 
 # Version Of Grav To Install
 ARG GRAV_VERSION=1.5.10
 
 # Install PHP And Modules Needed For Grav, With Optional Modules To Help With Performance
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    php \
-    php-apcu \
-    php-curl \
-    php-fpm \
-    php-gd \
-    php-mbstring \
-    php-xml \
-    php-yaml \
-    php-zip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    php7 \
+    php7-curl \
+    php7-fpm \
+    php7-gd \
+    php7-mbstring \
+    php7-pecl-apcu \
+    php7-pecl-yaml \
+    php7-xml \
+    php7-zip \
 
 # Install Grav Into The Root Web Directory
-WORKDIR /var/www
 RUN mkdir -p /var/www \
-    && apt-get update && apt-get install -y --no-install-recommends ca-certificates unzip wget \
-    && wget https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip \
-    && unzip grav-admin-v$GRAV_VERSION.zip \
-    && rm grav-admin-v$GRAV_VERSION.zip \
-    && mv grav-admin/* /var/www/ \
-    && rm -rfv grav-admin \
-    && apt-get purge -y unzip wget \
-    && rm -rf /var/lib/apt/lists/* \
+    && apk add --no-cache ca-certificates \
+    && apk add --no-cache --virtual .build-deps unzip wget \
+    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip \
+    && unzip /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
+    && rm /var/www/grav-admin-v$GRAV_VERSION.zip \
+    && mv /var/www/grav-admin/* /var/www/ \
+    && rm -rfv /var/www/grav-admin \
+    && apk del .build-deps \
     && chown -R www-data:www-data /var/www
 
 # Configure NGINX For Grav
