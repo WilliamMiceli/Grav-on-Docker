@@ -14,14 +14,15 @@ RUN apk add --no-cache \
     php7-pecl-apcu \
     php7-pecl-yaml \
     php7-xml \
-    php7-zip \
+    php7-zip
 
 # Install Grav Into The Root Web Directory
 RUN mkdir -p /var/www \
     && apk add --no-cache ca-certificates \
     && apk add --no-cache --virtual .build-deps unzip wget \
-    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip \
-    && unzip /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
+    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip
+
+RUN unzip /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
     && rm /var/www/grav-admin-v$GRAV_VERSION.zip \
     && mv /var/www/grav-admin/* /var/www/ \
     && rm -rfv /var/www/grav-admin \
