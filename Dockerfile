@@ -27,7 +27,9 @@ RUN unzip /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
     && mv /var/www/grav-admin/* /var/www/ \
     && rm -rfv /var/www/grav-admin \
     && apk del .build-deps \
+    && addgroup www-data
     && adduser -D www-data -G www-data \
+    && adduser nginx -G www-data \
     && chown -R www-data:www-data /var/www
 
 # Configure NGINX For Grav
