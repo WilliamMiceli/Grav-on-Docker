@@ -1,10 +1,10 @@
 FROM nginx:1.14.2
 USER root
 
-# Version of Grav to install
+# Version Of Grav To Install
 ARG GRAV_VERSION=1.5.10
 
-# Install PHP and modules needed for Grav, with optional modules to help with performance
+# Install PHP And Modules Needed For Grav, With Optional Modules To Help With Performance
 RUN apt-get update && apt-get install -y --no-install-recommends \
     php \
     php-apcu \
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php-zip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Grav into the root web directory
+# Install Grav Into The Root Web Directory
 WORKDIR /var/www
 RUN mkdir -p /var/www \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates unzip wget \
@@ -30,11 +30,14 @@ RUN mkdir -p /var/www \
     && rm -rf /var/lib/apt/lists/* \
     && chown -R www-data:www-data /var/www
 
-# Configure NGINX for Grav
+# Configure NGINX For Grav
 ADD https://raw.githubusercontent.com/getgrav/grav/fb20b58369d5e0140a4fa6da06edf8f40412f7bf/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
 RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf \
     && usermod -aG www-data nginx
 
+# Include Startup Script
+COPY /resources/*
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "/resources/startup.sh"]
