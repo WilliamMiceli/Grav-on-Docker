@@ -34,7 +34,8 @@ RUN mkdir -p /var/www \
 ADD https://raw.githubusercontent.com/getgrav/grav/c381bc83040e00c9a8ebe91ac3bda5fe0c217197/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
 RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf \
-    && sed -i 's/www-data:x:1000:www-data/www-data:x:1000:www-data,nginx/g' /etc/group
+    && sed -i 's/www-data:x:1000:www-data/www-data:x:1000:www-data,nginx/g' /etc/group \
+    && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php\/php7.2-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
 
 # Include Startup Script
 COPY /resources/ /resources/

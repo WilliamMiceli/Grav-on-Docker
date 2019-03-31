@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "[ INFO ] Starting PHP-FPM"
-service php7.0-fpm start
+php-fpm7 -D
 
 echo "[ INFO ] Starting nginx"
 nginx -g "daemon off;"
