@@ -32,12 +32,10 @@ RUN unzip /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
     && chown -R www-data:www-data /var/www
 
 # Configure NGINX For Grav
-ADD https://raw.githubusercontent.com/getgrav/grav/fb20b58369d5e0140a4fa6da06edf8f40412f7bf/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
+ADD https://raw.githubusercontent.com/getgrav/grav/c381bc83040e00c9a8ebe91ac3bda5fe0c217197/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
 RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf \
-    && apk add --no-cache --virtual .build-deps shadow \
-    && usermod -aG www-data nginx \
-    && apk del .build-deps
+    && sed -i 's/www-data:x:1000:www-data/www-data:x:1000:www-data,nginx/g' /etc/group
 
 # Include Startup Script
 COPY /resources/ /resources/
