@@ -33,6 +33,7 @@ ADD https://raw.githubusercontent.com/getgrav/grav/c381bc83040e00c9a8ebe91ac3bda
 RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/fastcgi_pass unix:\/var\/run\/php\/php7.2-fpm.sock;/fastcgi_pass unix:\/var\/run\/php-fpm.sock;/g' /etc/nginx/conf.d/default.conf \
     && sed -i 's/#listen 80;/listen 80;/g' /etc/nginx/conf.d/default.conf \
+    && sed -i 's/user = nobody\ngroup = nobody/user = nginx\ngroup = nginx/g' /etc/php7/php-fpm.d/www.conf \
     && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
 
 # Include Startup Script
