@@ -17,6 +17,7 @@ RUN apk add --no-cache \
     php7-pecl-apcu \
     php7-pecl-yaml \
     php7-session \
+    php7-simplexml \
     php7-xml \
     php7-zip
 
