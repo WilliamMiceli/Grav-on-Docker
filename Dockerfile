@@ -2,7 +2,7 @@ FROM nginx:1.15.10-alpine
 USER root
 
 # Version Of Grav To Install
-ARG GRAV_VERSION=1.5.10
+ARG GRAV_VERSION=1.6.8
 
 # Install PHP And Modules Needed For Grav, With Optional Modules To Help With Performance
 RUN apk add --no-cache \
