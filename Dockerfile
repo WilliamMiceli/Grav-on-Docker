@@ -10,6 +10,7 @@ RUN apk add --no-cache \
     php7-curl \
     php7-fpm \
     php7-gd \
+    php7-json \
     php7-mbstring \
     php7-pecl-apcu \
     php7-pecl-yaml \
@@ -37,6 +38,7 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && sed -i '24cgroup = nginx' /etc/php7/php-fpm.d/www.conf \
     && sed -i '47clisten.owner = nginx' /etc/php7/php-fpm.d/www.conf \
     && sed -i '48clisten.group = nginx' /etc/php7/php-fpm.d/www.conf \
+    && sed -i '49clisten.mode = 0660' /etc/php7/php-fpm.d/www.conf \
     && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
 
 # Include Startup Script
