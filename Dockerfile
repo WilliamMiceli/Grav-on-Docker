@@ -8,10 +8,12 @@ ARG GRAV_VERSION=1.5.10
 RUN apk add --no-cache \
     php7 \
     php7-curl \
+    php7-dom \
     php7-fpm \
     php7-gd \
     php7-json \
     php7-mbstring \
+    php7-openssl \
     php7-pecl-apcu \
     php7-pecl-yaml \
     php7-session \
