@@ -4,30 +4,27 @@ services:
   - docker:dind
 
 stages:
-  - Build Image
+  - Build-Base
+  - Build-Git
+
+tags:
+  - docker
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
-build-master:
+build-base:
+  stage: Build-Base
   before_script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-  stage: Build Image
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE"
-  only:
-    - master
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
 
-build-other:
-  before_script:
-    - docker info
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-  stage: Build Image
+build-git:
+  stage: Build-Git
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
-  except:
-    - master
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./git/
+    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
