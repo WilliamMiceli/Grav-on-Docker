@@ -7,9 +7,6 @@ stages:
   - Build-Base
   - Build-Git
 
-tags:
-  - docker
-
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
