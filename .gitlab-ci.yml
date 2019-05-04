@@ -5,7 +5,7 @@ services:
 
 stages:
   - Base
-  - Extra
+  - Variants
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
@@ -31,7 +31,7 @@ build-base:
     - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
-  stage: Extra
+  stage: Variants
   dependencies:
     - build-base
   except:
