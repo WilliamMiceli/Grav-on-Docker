@@ -23,7 +23,7 @@ build-base:
   before_script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - echo "gitlab 10.42.11.29" >> /etc/resolv.conf
+#    - echo "gitlab 10.42.11.29" >> /etc/resolv.conf
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
