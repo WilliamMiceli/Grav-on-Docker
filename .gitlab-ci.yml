@@ -15,8 +15,7 @@ build-base:
   stage: Base
   artifacts:
     paths:
-      - /var/lib/docker/
-#      - ${CI_PROJECT_DIR}
+      - ./images/
   except:
     - pushes
   tags:
@@ -27,10 +26,7 @@ build-base:
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
-    - docker image ls
-    - find . -type f
-    - find ${CI_PROJECT_DIR} -type f
-    - docker image inspect williammiceli/grav:1.6.8
+    - docker save --output "$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
   stage: Extra
@@ -41,6 +37,7 @@ build-git:
   tags:
     - docker
   script:
+    - docker load --input "$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
     - docker image ls
     - docker build --pull --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./git/
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
