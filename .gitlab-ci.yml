@@ -25,7 +25,7 @@ build-base:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
-    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
+    #- docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - mkdir ./images
     - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
@@ -41,4 +41,4 @@ build-git:
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
     - docker image ls
     - docker build --pull --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./git/
-    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
+    #- docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
