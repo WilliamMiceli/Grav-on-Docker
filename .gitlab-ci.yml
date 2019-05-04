@@ -11,9 +11,6 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
-before_script:
-  - echo "gitlab 10.42.11.29" >> /etc/resolve.conf
-
 build-base:
   stage: Base
   artifacts:
@@ -26,6 +23,7 @@ build-base:
   before_script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "gitlab 10.42.11.29" >> /etc/resolve.conf
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
