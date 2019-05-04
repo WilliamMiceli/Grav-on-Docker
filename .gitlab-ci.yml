@@ -4,15 +4,17 @@ services:
   - docker:dind
 
 stages:
-  - Build-Base
-  - Build-Git
+  - Base
+  - Extra-Git
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
 build-base:
-  stage: Build-Base
+  stage: Base
+  artifacts:
+    - builds
   except:
     - pushes
   before_script:
@@ -23,7 +25,9 @@ build-base:
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
 
 build-git:
-  stage: Build-Git
+  stage: Extra-Git
+  dependencies:
+    - build-base
   except:
     - pushes
   script:
