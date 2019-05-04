@@ -22,9 +22,9 @@ RUN apk add --no-cache \
 RUN mkdir -p /var/www \
     && apk add --no-cache ca-certificates \
     && apk add --no-cache --virtual .build-deps unzip wget \
-    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/$GRAV_VERSION/grav-admin-v$GRAV_VERSION.zip \
-    && unzip -q /var/www/grav-admin-v$GRAV_VERSION.zip -d /var/www/ \
-    && rm /var/www/grav-admin-v$GRAV_VERSION.zip \
+    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
+    && unzip -q /var/www/grav-admin-v${GRAV_VERSION}.zip -d /var/www/ \
+    && rm /var/www/grav-admin-v${GRAV_VERSION}.zip \
     && mv /var/www/grav-admin/* /var/www/ \
     && rm -rfv /var/www/grav-admin \
     && apk del .build-deps \
