@@ -13,15 +13,19 @@ variables:
 
 build-base:
   stage: Build-Base
+  except:
+    - pushes
   before_script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
 
 build-git:
   stage: Build-Git
+  except:
+    - pushes
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./git/
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
