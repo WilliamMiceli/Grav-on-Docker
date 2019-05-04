@@ -1,6 +1,8 @@
 FROM nginx:1.15.10-alpine
 USER root
 
+ARG GRAV_VERSION
+
 # Install PHP And Modules Needed For Grav, With Optional Modules To Help With Performance
 RUN apk add --no-cache \
     php7 \
