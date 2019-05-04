@@ -15,7 +15,8 @@ build-base:
   stage: Base
   artifacts:
     paths:
-      - ${CI_PROJECT_DIR}
+      - /var/lib/docker/
+#      - ${CI_PROJECT_DIR}
   except:
     - pushes
   tags:
