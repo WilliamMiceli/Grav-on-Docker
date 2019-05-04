@@ -27,6 +27,7 @@ build-base:
     - docker image ls
     - find . -type f
     - find ${CI_PROJECT_DIR} -type f
+    - ls -a /
 
 build-git:
   stage: Extra-Git
