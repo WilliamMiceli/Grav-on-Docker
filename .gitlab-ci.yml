@@ -15,7 +15,7 @@ build-base:
   stage: Base
   artifacts:
     paths:
-      - builds
+      - ${CI_BUILDS_DIR}
   except:
     - pushes
   before_script:
