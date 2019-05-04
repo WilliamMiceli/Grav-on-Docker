@@ -14,6 +14,7 @@ variables:
 build-base:
   stage: Base
   artifacts:
+    expire_in: 3 days
     paths:
       - ./images/
   except:
