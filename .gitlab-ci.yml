@@ -14,7 +14,8 @@ variables:
 build-base:
   stage: Base
   artifacts:
-    - builds
+    paths:
+      - builds
   except:
     - pushes
   before_script:
