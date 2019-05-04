@@ -28,6 +28,8 @@ build-base:
     - find . -type f
     - find ${CI_PROJECT_DIR} -type f
     - ls -a /
+    - ls -a /var/lib/docker
+    - docker image inspect williammiceli/grav:1.6.8
 
 build-git:
   stage: Extra-Git
