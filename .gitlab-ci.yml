@@ -15,7 +15,7 @@ build-base:
   stage: Base
   artifacts:
     paths:
-      - ${CI_BUILDS_DIR}
+      - ${CI_PROJECT_DIR}
   except:
     - pushes
   before_script:
@@ -26,6 +26,7 @@ build-base:
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker image ls
     - find . -type f
+    - find ${CI_PROJECT_DIR} -type f
 
 build-git:
   stage: Extra-Git
