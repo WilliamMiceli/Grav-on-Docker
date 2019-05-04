@@ -40,5 +40,5 @@ build-git:
   script:
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
     - docker image ls
-    - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f Dockerfile.git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./variants/
+    - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile.git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
     #- docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
