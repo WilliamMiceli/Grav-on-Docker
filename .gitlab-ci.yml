@@ -18,6 +18,8 @@ build-base:
       - ${CI_PROJECT_DIR}
   except:
     - pushes
+  tags:
+    - docker
   before_script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
@@ -35,6 +37,8 @@ build-git:
     - build-base
   except:
     - pushes
+  tags:
+    - docker
   script:
     - docker image ls
     - docker build --pull --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" ./git/
