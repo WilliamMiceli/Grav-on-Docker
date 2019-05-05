@@ -43,6 +43,8 @@ build-git-master:
   tags:
     - docker
   before_script:
+    - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
@@ -78,6 +80,8 @@ build-git:
   tags:
     - docker
   before_script:
+    - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git" .
