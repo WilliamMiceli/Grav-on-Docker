@@ -29,7 +29,7 @@ build-base-master:
     - mkdir ./images
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
-    #- docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
+    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git-master:
@@ -46,7 +46,7 @@ build-git-master:
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
-    #- docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
+    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
 
 build-base:
   stage: Base
@@ -65,7 +65,7 @@ build-base:
     - mkdir ./images
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION" .
-    #- docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION"
     - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
@@ -81,4 +81,4 @@ build-git:
     - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git" .
-    #- docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git"
