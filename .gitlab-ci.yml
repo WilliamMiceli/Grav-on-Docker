@@ -29,10 +29,8 @@ build-base-master:
     - mkdir ./images
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
-    - docker images
-    - echo "$CI_REGISTRY_IMAGE"
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
-    - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git-master:
   stage: Variants
@@ -45,12 +43,9 @@ build-git-master:
   tags:
     - docker
   before_script:
-    - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - ls ./images
-    - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
   script:
-    - docker images
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
 
@@ -71,9 +66,8 @@ build-base:
     - mkdir ./images
   script:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION" .
-    - docker images
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION"
-    - docker save --output "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
   stage: Variants
@@ -85,10 +79,8 @@ build-git:
   tags:
     - docker
   before_script:
-    - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - docker load --input "./images/$CI_REGISTRY_IMAGE_$CI_COMMIT_SHORT_SHA.tar"
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
   script:
-    - docker images
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git"
