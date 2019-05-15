@@ -24,13 +24,13 @@ RUN apk add --no-cache \
 # Install Grav Into The Root Web Directory
 RUN mkdir -p /var/www \
     && apk add --no-cache ca-certificates \
-    && apk add --no-cache --virtual .build-deps unzip wget \
+    && apk add --no-cache --virtual .install-dependencies unzip wget \
     && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
     && unzip -q /var/www/grav-admin-v${GRAV_VERSION}.zip -d /var/www/ \
     && rm /var/www/grav-admin-v${GRAV_VERSION}.zip \
     && mv /var/www/grav-admin/* /var/www/ \
     && rm -rfv /var/www/grav-admin \
-    && apk del .build-deps \
+    && apk del .install-dependencies \
     && chown -R nginx:nginx /var/www
 
 # Configure NGINX For Grav
