@@ -27,7 +27,7 @@ build-base:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - mkdir ./images
-  script: /ci/build-base.sh
+  script: "/ci/build-base.sh"
 
 build-git:
   stage: Variants
