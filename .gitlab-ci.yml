@@ -11,10 +11,10 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
-build-base-master:
+build-base:
   stage: Base
   artifacts:
-    expire_in: 3 days
+    expire_in: 1 week
     paths:
       - ./images/
   except:
@@ -32,10 +32,10 @@ build-base-master:
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
-build-git-master:
+build-git:
   stage: Variants
   dependencies:
-    - build-base-master
+    - build-base
   except:
     - pushes
   only:
@@ -48,39 +48,3 @@ build-git-master:
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
-
-build-base:
-  stage: Base
-  artifacts:
-    expire_in: 3 days
-    paths:
-      - ./images/
-  except:
-    - master
-    - pushes
-  tags:
-    - docker
-  before_script:
-    - docker info
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - mkdir ./images
-  script:
-    - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION"
-    - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
-
-build-git:
-  stage: Variants
-  dependencies:
-    - build-base
-  except:
-    - master
-    - pushes
-  tags:
-    - docker
-  before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
-    - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
-  script:
-    - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$GRAV_VERSION-git"
