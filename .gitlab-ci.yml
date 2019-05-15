@@ -6,6 +6,7 @@ services:
 stages:
   - Base
   - Variants
+  - Push
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
@@ -19,32 +20,45 @@ build-base:
       - ./images/
   except:
     - pushes
-  only:
-    - master
   tags:
     - docker
   before_script:
-    - docker info
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - mkdir ./images
   script:
-    - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION" .
-    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
+    - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
   stage: Variants
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - ./images/
   dependencies:
     - build-base
   except:
     - pushes
-  only:
-    - master
+  tags:
+    - docker
+  script:
+    - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" .
+    - docker save --output "./images/$CI_COMMIT_SHORT_SHA-git.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+
+push:
+  stage: Push
+  dependencies:
+    - build-base
+    - build-git
+  except:
+    - pushes
   tags:
     - docker
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA-git.tar"
   script:
-    - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git" .
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
+    - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
