@@ -1,4 +1,4 @@
-FROM nginx:1.15.10-alpine
+FROM nginx:stable-alpine
 USER root
 
 ARG GRAV_VERSION
