@@ -3,8 +3,9 @@ USER root
 
 ARG GRAV_VERSION
 
-# Install PHP And Modules Needed For Grav, With Optional Modules To Help With Performance
+# Install Dependencies Needed For Grav, With Optional Modules To Help With Performance
 RUN apk add --no-cache \
+    dcron \
     php7 \
     php7-curl \
     php7-dom \
