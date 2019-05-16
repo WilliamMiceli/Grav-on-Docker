@@ -4,16 +4,16 @@ services:
   - docker:dind
 
 stages:
-  - Base
-  - Variants
-  - Push
+  - Build Base
+  - Build Variants
+  - Push Images
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
 build-base:
-  stage: Base
+  stage: Build Base
   artifacts:
     expire_in: 1 week
     paths:
@@ -29,7 +29,7 @@ build-base:
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 build-git:
-  stage: Variants
+  stage: Build Variants
   artifacts:
     expire_in: 1 week
     paths:
@@ -47,7 +47,7 @@ build-git:
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA-git.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git"
 
 push:
-  stage: Push
+  stage: Push Images
   dependencies:
     - build-base
     - build-git
