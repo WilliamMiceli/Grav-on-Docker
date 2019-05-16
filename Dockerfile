@@ -19,7 +19,8 @@ RUN apk add --no-cache \
     php7-session \
     php7-simplexml \
     php7-xml \
-    php7-zip
+    php7-zip \
+    && (crontab -l; echo "* * * * * cd /var/www;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -
 
 # Install Grav Into The Root Web Directory
 RUN mkdir -p /var/www \
