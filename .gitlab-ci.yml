@@ -46,7 +46,7 @@ build-git:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" .
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA-git.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git"
 
-push:
+push-version:
   stage: Push Images
   dependencies:
     - build-base
@@ -64,3 +64,23 @@ push:
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
+
+push-latest:
+  stage: Push Images
+  dependencies:
+    - build-base
+    - build-git
+  except:
+    - pushes
+  tags:
+    - docker
+  when: manual
+  before_script:
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA-git.tar"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+  script:
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:latest"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" "$CI_REGISTRY_IMAGE:latest-git"
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+    - docker push "$CI_REGISTRY_IMAGE:latest-git"
