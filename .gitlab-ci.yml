@@ -40,6 +40,8 @@ build-git:
     - pushes
   tags:
     - docker
+  before_script:
+    - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
   script:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" .
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA-git.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
@@ -54,9 +56,9 @@ push:
   tags:
     - docker
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - docker load --input "./images/$CI_COMMIT_SHORT_SHA.tar"
     - docker load --input "./images/$CI_COMMIT_SHORT_SHA-git.tar"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
