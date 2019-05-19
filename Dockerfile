@@ -47,8 +47,6 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && sed -i '49clisten.mode = 0660' /etc/php7/php-fpm.d/www.conf \
     && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
 
-VOLUME /var/www/
-
 COPY /entrypoint.sh /
 
 EXPOSE 80
