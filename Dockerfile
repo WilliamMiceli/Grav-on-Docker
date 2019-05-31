@@ -49,5 +49,7 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
 
 COPY /entrypoint.sh /
 
+VOLUME ["/var/www/user"]
+
 EXPOSE 80
 CMD ["sh", "/entrypoint.sh"]
