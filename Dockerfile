@@ -5,7 +5,7 @@ USER root
 ARG GRAV_VERSION
 
 # Install Dependencies Needed For Grav, With Optional Modules To Help With Performance
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     dcron \
     php7 \
     php7-curl \
@@ -33,7 +33,9 @@ RUN mkdir -p /var/www \
     && mv /var/www/grav-admin/* /var/www/ \
     && rm -rfv /var/www/grav-admin \
     && apk del .install-dependencies \
-    && chown -R nginx:nginx /var/www
+    && chown -R nginx:nginx /var/www \
+    && tar -czf USER.tar.gz /var/www/user \
+    && rm -r /var/www/user/*
 
 # Configure NGINX For Grav
 ADD https://raw.githubusercontent.com/getgrav/grav/c381bc83040e00c9a8ebe91ac3bda5fe0c217197/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
