@@ -13,6 +13,7 @@ else
     echo "[ INFO ] Not taking any action"
 fi
 
+echo "[ INFO ] Recursively setting default nginx:nginx permissions on web directory"
 chown -R nginx:nginx /var/www
 
 echo "[ INFO ] Starting PHP-FPM"
