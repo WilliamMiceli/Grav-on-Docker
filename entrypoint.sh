@@ -1,12 +1,16 @@
 #!/bin/sh
 
 # Copy default "User" directory if none already exist
-echo "[ INFO ] Checking if the /user/data "
-if [ -e /var/www/user/data ]
+echo "[ INFO ] Checking for any existing files"
+if [ -z `/var/www/user/` ]
 then
-    echo "True"
+    echo "No pre-existing files found (New instance)"
+    echo "Copying default files into the /var/www/user directory"
+    tar xz -f USER.tar.gz -C /
+    echo "Default files have been copied successfully"
 else
-    echo "False"
+    echo "Pre-existing files found (Existing instance)"
+    echo "Not taking any action"
 fi
 
 chown -R nginx:nginx /var/www
