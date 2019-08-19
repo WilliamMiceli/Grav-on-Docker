@@ -2,11 +2,11 @@
 
 # Copy default "User" directory if none already exist
 echo "[ INFO ] Checking for any existing files"
-if [ -z `ls -A /var/www/user/` ]
+if [ -z `ls -A /var/www/` ]
 then
     echo "[ INFO ] No pre-existing files found (New instance)"
     echo "[ INFO ] Copying default files into the /var/www/user directory"
-    tar xz -f USER.tar.gz -C /
+    tar xz -f /GRAV.tar.gz -C /
     echo "[ INFO ] Default files have been copied successfully"
 else
     echo "[ INFO ] Pre-existing files found (Existing instance)"
