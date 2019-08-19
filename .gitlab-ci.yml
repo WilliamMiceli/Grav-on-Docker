@@ -19,14 +19,14 @@ stages:
     - docker build --pull --build-arg "GRAV_VERSION=$GRAV_VERSION" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
-0-build-git:
+1-build-git:
   stage: Build Variants
   artifacts:
     expire_in: 1 week
     paths:
       - ./images/
   dependencies:
-    - build-base
+    - 0-build-base
   tags:
     - docker
   before_script:
@@ -35,11 +35,11 @@ stages:
     - docker build --build-arg "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA" -f ./variants/Dockerfile-git -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git" .
     - docker save --output "./images/$CI_COMMIT_SHORT_SHA-git.tar" "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA-git"
 
-0-push-dev:
+2A-push-dev:
   stage: Push Images
   dependencies:
-    - build-base
-    - build-git
+    - 0-build-base
+    - 1-build-git
   tags:
     - docker
   before_script:
@@ -52,11 +52,11 @@ stages:
     - docker push "$CI_REGISTRY_IMAGE:dev-$GRAV_VERSION"
     - docker push "$CI_REGISTRY_IMAGE:dev-$GRAV_VERSION-git"
 
-1-push-version:
+2B-push-version:
   stage: Push Images
   dependencies:
-    - build-base
-    - build-git
+    - 0-build-base
+    - 1-build-git
   tags:
     - docker
   when: manual
@@ -70,11 +70,11 @@ stages:
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION"
     - docker push "$CI_REGISTRY_IMAGE:$GRAV_VERSION-git"
 
-2-push-latest:
+2C-push-latest:
   stage: Push Images
   dependencies:
-    - build-base
-    - build-git
+    - 0-build-base
+    - 1-build-git
   tags:
     - docker
   when: manual
