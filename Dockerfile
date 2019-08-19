@@ -20,22 +20,7 @@ RUN apk update && apk add --no-cache \
     php7-session \
     php7-simplexml \
     php7-xml \
-    php7-zip \
-    && (crontab -u nginx -l; echo "* * * * * cd /var/www;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u nginx -
-
-# Install Grav Into The Root Web Directory
-RUN mkdir -p /var/www \
-    && apk add --no-cache ca-certificates \
-    && apk add --no-cache --virtual .install-dependencies unzip wget \
-    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
-    && unzip -q /var/www/grav-admin-v${GRAV_VERSION}.zip -d /var/www/ \
-    && rm /var/www/grav-admin-v${GRAV_VERSION}.zip \
-    && mv /var/www/grav-admin/* /var/www/ \
-    && rm -rfv /var/www/grav-admin \
-    && apk del .install-dependencies \
-    && chown -R nginx:nginx /var/www \
-    && tar -czf USER.tar.gz /var/www/user \
-    && rm -r /var/www/user/*
+    php7-zip
 
 # Configure NGINX For Grav
 ADD https://raw.githubusercontent.com/getgrav/grav/c381bc83040e00c9a8ebe91ac3bda5fe0c217197/webserver-configs/nginx.conf /etc/nginx/conf.d/default.conf
@@ -48,6 +33,23 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && sed -i '48clisten.group = nginx' /etc/php7/php-fpm.d/www.conf \
     && sed -i '49clisten.mode = 0660' /etc/php7/php-fpm.d/www.conf \
     && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
+
+# Setup Cron
+RUN (crontab -u nginx -l; echo "* * * * * cd /var/www;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u nginx -
+
+# Prepare Grav Files
+RUN mkdir -p /var/www \
+    && apk add --no-cache ca-certificates \
+    && apk add --no-cache --virtual .install-dependencies unzip wget \
+    && wget -P /var/www/ https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
+    && unzip -q /var/www/grav-admin-v${GRAV_VERSION}.zip -d /var/www/ \
+    && rm /var/www/grav-admin-v${GRAV_VERSION}.zip \
+    && mv /var/www/grav-admin/* /var/www/ \
+    && rm -rfv /var/www/grav-admin \
+    && apk del .install-dependencies \
+    && chown -R nginx:nginx /var/www \
+    && tar -cz -f /GRAV.tar.gz /var/www \
+    && rm -r /var/www*
 
 COPY /entrypoint.sh /
 
