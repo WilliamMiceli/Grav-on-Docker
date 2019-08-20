@@ -53,7 +53,7 @@ RUN mkdir -p /var/www \
 
 COPY /entrypoint.sh /
 
-VOLUME /var/www/user
+VOLUME /var/www/
 
 EXPOSE 80
 CMD ["sh", "/entrypoint.sh"]
