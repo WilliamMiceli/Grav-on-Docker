@@ -9,13 +9,13 @@ directory_empty() {
 echo "[ INFO ] Checking for any existing user files"
 if directory_empty "var/www/user"
 then
-    echo "[ INFO ] No pre-existing files found (New instance)"
-    echo "[ INFO ] Extracting files into /var/www/"
+    echo "[ INFO ] No pre-existing user files found (New instance)"
+    echo "[ INFO ] Extracting all Grav files into /var/www/"
     tar xz -f /GRAV.tar.gz -C /
     echo "[ INFO ] Default files have been extracted successfully"
 else
-    echo "[ INFO ] Root web directory not empty (Pre-existing instance):"
-    ls -A /var/www/
+    echo "[ INFO ] 'user' directory not empty (Pre-existing instance):"
+    ls -A /var/www/user/
     echo "[ INFO ] Not extracting new files from archive"
 fi
 
