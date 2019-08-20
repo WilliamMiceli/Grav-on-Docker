@@ -1,8 +1,13 @@
 #!/bin/sh
 
-# Copy default "User" directory if none already exist
-echo "[ INFO ] Checking for any existing files"
-if [ -z `ls -A /var/www/` ]
+# Return TRUE if specified directory is empty
+directory_empty() {
+    [ -z "$(ls -A "$1/")" ]
+}
+
+# Extract new Grav files if no user files are already present
+echo "[ INFO ] Checking for any existing user files"
+if [ directory_empty "var/www/user" ]
 then
     echo "[ INFO ] No pre-existing files found (New instance)"
     echo "[ INFO ] Extracting files into /var/www/"
