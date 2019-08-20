@@ -5,12 +5,13 @@ echo "[ INFO ] Checking for any existing files"
 if [ -z `ls -A /var/www/` ]
 then
     echo "[ INFO ] No pre-existing files found (New instance)"
-    echo "[ INFO ] Copying default files into the /var/www/user directory"
+    echo "[ INFO ] Extracting files into /var/www/"
     tar xz -f /GRAV.tar.gz -C /
-    echo "[ INFO ] Default files have been copied successfully"
+    echo "[ INFO ] Default files have been extracted successfully"
 else
-    echo "[ INFO ] Pre-existing files found (Existing instance)"
-    echo "[ INFO ] Not taking any action"
+    echo "[ INFO ] Root web directory not empty (Pre-existing instance):"
+    ls -A /var/www/
+    echo "[ INFO ] Not extracting new files from archive"
 fi
 
 echo "[ INFO ] Recursively setting default nginx:nginx permissions on web directory"
