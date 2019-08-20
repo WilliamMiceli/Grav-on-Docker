@@ -7,7 +7,7 @@ directory_empty() {
 
 # Extract new Grav files if no user files are already present
 echo "[ INFO ] Checking for any existing user files"
-if [ directory_empty "var/www/user" ]
+if directory_empty "var/www/user"
 then
     echo "[ INFO ] No pre-existing files found (New instance)"
     echo "[ INFO ] Extracting files into /var/www/"
