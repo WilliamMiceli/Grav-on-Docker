@@ -48,7 +48,7 @@ RUN mkdir -p /var/www /usr/src/grav/user \
     && rm -rfv /var/www/grav-admin \
     && apk del .install-dependencies \
     && chown -R nginx:nginx /var/www \
-    && mv -v /var/www/user /usr/src/grav/user
+    && mv -v /var/www/user/* /usr/src/grav/user
 
 COPY /entrypoint.sh /
 
