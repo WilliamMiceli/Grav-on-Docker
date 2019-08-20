@@ -38,16 +38,17 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
 RUN (crontab -u nginx -l; echo "* * * * * cd /var/www;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u nginx -
 
 # Prepare Grav Files
-RUN mkdir -p /var/www /usr/src/grav \
+RUN mkdir -p /var/www /usr/src/grav/user \
     && apk add --no-cache ca-certificates \
     && apk add --no-cache --virtual .install-dependencies unzip wget \
-    && wget -P /usr/src/grav https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
-    && unzip -q /usr/src/grav/grav-admin-v${GRAV_VERSION}.zip -d /usr/src/grav \
-    && rm /usr/src/grav/grav-admin-v${GRAV_VERSION}.zip \
-    && mv -v /usr/src/grav/grav-admin/* /usr/src/grav \
-    && rm -rfv /usr/src/grav/grav-admin \
+    && wget -P /var/www https://github.com/getgrav/grav/releases/download/${GRAV_VERSION}/grav-admin-v${GRAV_VERSION}.zip \
+    && unzip -q /var/www/grav-admin-v${GRAV_VERSION}.zip -d /var/www \
+    && rm /var/www/grav-admin-v${GRAV_VERSION}.zip \
+    && mv -v /var/www/grav-admin/* /var/www \
+    && rm -rfv /var/www/grav-admin \
     && apk del .install-dependencies \
-    && chown -R nginx:nginx /usr/src/grav
+    && chown -R nginx:nginx /var/www \
+    && mv -v /var/www/user /usr/src/grav/user
 
 COPY /entrypoint.sh /
 
