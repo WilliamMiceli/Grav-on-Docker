@@ -1,6 +1,7 @@
 FROM nginx:stable-alpine
 LABEL maintainer="William Miceli <git@williammiceli.me>"
 USER root
+WORKDIR /var/www
 
 ARG GRAV_VERSION
 
