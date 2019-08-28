@@ -36,7 +36,7 @@ RUN sed -i 's/root \/home\/USER\/www\/html/root \/var\/www/g' /etc/nginx/conf.d/
     && sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /etc/php7/php-fpm.d/www.conf
 
 # Setup Cron
-RUN (crontab -u nginx -l; echo "* * * * * cd /var/www;/usr/bin/php bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u nginx -
+RUN (crontab -u nginx -l; echo "* * * * * cd /var/www;/usr/bin/php7 bin/grav scheduler 1>> /dev/null 2>&1") | crontab -u nginx -
 
 # Prepare Grav Files
 RUN mkdir -p /var/www /usr/src/grav/user \
